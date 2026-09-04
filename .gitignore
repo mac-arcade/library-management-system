@@ -1,0 +1,16 @@
+# ---------------------------------------------------
+# Dependencies
+# ---------------------------------------------------
+# Ignore the node_modules folder to keep the repository clean 
+# and avoid pushing thousands of third-party package files.
+node_modules/
+
+#---------------------------------------------------
+# Security & Environment Variables
+# ----------------------------------------------------
+# Prevent sensitive keys, API tokens, and credentials 
+# from being leaked to the remote repository.
+.env
+
+# Ignore the package lockfile
+package-lock.json
