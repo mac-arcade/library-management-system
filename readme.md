@@ -39,9 +39,9 @@ GET: get all issued books with their fine amount
     >> Standard (6 months)
     >> Premium (12 months)
 
-> > If a user missed the renewal date, then user should be collected with ₹100
-> > If a user missed his subscription, then user is expected to pay ₹100
-> > If a user missed both renewal and subscription, then the collected amount should be ₹200
+    >> If a user missed the renewal date, then user should be collected with ₹100
+    >> If a user missed his subscription, then user is expected to pay ₹100
+    >> If a user missed both renewal and subscription, then the collected amount should be ₹200
 
 ## Commands: 
 npm init
