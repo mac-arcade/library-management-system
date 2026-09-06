@@ -7,7 +7,7 @@ const express = require("express");
 const router = express.Router();
 
 // import users data
-const { users } = require("./data/users.json");
+const { users } = require("../data/users.json");
 
 /**
  * Route: /users
@@ -16,7 +16,7 @@ const { users } = require("./data/users.json");
  * Access: Public
  * Parametera: none
  */
-router.get("/users", (req, res) => {
+router.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         data: users
@@ -30,7 +30,7 @@ router.get("/users", (req, res) => {
  * Access: Public
  * Parametera: none
  */
-router.post("/users", (req, res) => {
+router.post("/", (req, res) => {
     /* req.body should have the following fields */
     const { name,
         surname,
@@ -71,7 +71,7 @@ router.post("/users", (req, res) => {
  * Access: Public
  * Parametera: id
  */
-router.get("/users/:id", (req, res) => {
+router.get("/:id", (req, res) => {
 
     // const { id } = req.params;
     const id = Number(req.params.id);
@@ -96,7 +96,7 @@ router.get("/users/:id", (req, res) => {
  * Access: Public
  * Parametera: id
  */
-router.put("/users/:id", (req, res) => {
+router.put("/:id", (req, res) => {
 
     // get passed id from req parameter
     const id = Number(req.params.id);
@@ -133,7 +133,7 @@ router.put("/users/:id", (req, res) => {
  * Access: Public
  * Parametera: id
  */
-router.delete("/users/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
 
     // get passed id from request parameter
     const id = Number(req.params.id);

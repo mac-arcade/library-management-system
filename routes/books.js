@@ -7,6 +7,6 @@ const express = require("express");
 const router = express.Router();
 
 // import books data
-const { books } = require("./data/books.json");
+const { books } = require("../data/books.json");
 
 module.exports = router;
