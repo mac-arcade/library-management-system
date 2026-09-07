@@ -1,0 +1,54 @@
+{
+  "bookCopies": [
+    {
+      "id": 1,
+      "bookId": 1,
+      "status": "issued"
+    },
+    {
+      "id": 2,
+      "bookId": 1,
+      "status": "available"
+    },
+    {
+      "id": 3,
+      "bookId": 2,
+      "status": "issued"
+    },
+    {
+      "id": 4,
+      "bookId": 2,
+      "status": "available"
+    },
+    {
+      "id": 5,
+      "bookId": 3,
+      "status": "issued"
+    },
+    {
+      "id": 6,
+      "bookId": 3,
+      "status": "available"
+    },
+    {
+      "id": 7,
+      "bookId": 4,
+      "status": "available"
+    },
+    {
+      "id": 8,
+      "bookId": 4,
+      "status": "available"
+    },
+    {
+      "id": 9,
+      "bookId": 5,
+      "status": "available"
+    },
+    {
+      "id": 10,
+      "bookId": 5,
+      "status": "available"
+    }
+  ]
+}
