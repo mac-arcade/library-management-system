@@ -1,0 +1,34 @@
+{
+  "issuedBooks": [
+    {
+      "id": 1,
+      "userId": 1,
+      "copyId": 1,
+      "issuedDate": "2026-08-25",
+      "returnDate": "2026-09-08",
+      "actualReturnDate": "",
+      "status": "issued",
+      "fine": 0
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "copyId": 3,
+      "issuedDate": "2026-08-28",
+      "returnDate": "2026-09-11",
+      "actualReturnDate": "",
+      "status": "issued",
+      "fine": 0
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "copyId": 5,
+      "issuedDate": "2026-08-15",
+      "returnDate": "2026-08-29",
+      "actualReturnDate": "",
+      "status": "issued",
+      "fine": 100
+    }
+  ]
+}
