@@ -9,6 +9,9 @@ const router = express.Router();
 // import books data
 const { books } = require("../data/books.json");
 
+// import all physical book copies data
+const { bookCopies } = require("../data/bookCopies.json");
+
 /**
  * Route: /books
  * Method: GET
@@ -95,6 +98,36 @@ router.post("/", (req, res) => {
     });
 });
 
+
+/**
+ * Route: /books/issued
+ * Method: GET
+ * Description: Get all physical book copies that are currently issued
+ * Access: Public
+ * Parametera: none
+ */
+router.get("/issued", (req, res) => {
+
+    // filter the book copies and keep only those whose status is "issued"
+    const issued = bookCopies.filter(
+        (each) => each.status === "issued"
+    );
+
+    // if there are no currently issued book copies
+    if (issued.length === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "No issued books"
+        });
+    }
+
+    // return all currently issued book copies
+    res.status(200).json({
+        success: true,
+        data: issued
+    });
+});
+
 /**
  * Route: /books/:id
  * Method: GET
@@ -112,7 +145,7 @@ router.get("/:id", (req, res) => {
 
     // book not found
     if (!book) {
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: `book with id: ${id} is not present in database`
         });
@@ -143,7 +176,7 @@ router.put("/:id", (req, res) => {
 
     // book not found
     if (index === -1) {
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: `book with id: ${id} is not present in database`
         });
@@ -184,7 +217,7 @@ router.delete("/:id", (req, res) => {
 
     // book is not found
     if (index === -1) {
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: `book with id ${id} is not found`
         });
@@ -200,6 +233,5 @@ router.delete("/:id", (req, res) => {
     });
 
 });
-
 
 module.exports = router;
