@@ -100,7 +100,7 @@ router.put("/:id", (req, res) => {
 
     // get passed id from req parameter
     const id = Number(req.params.id);
-    const { data } = req.body;
+    const data = req.body;
 
     // find index of user with passed id
     const index = users.findIndex((user) => user.id === id);
