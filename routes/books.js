@@ -124,6 +124,47 @@ router.get("/:id", (req, res) => {
         data: book
     });
 
+});
+
+/**
+ * Route: /books/:id
+ * Method: PUT
+ * Description: Updating a book by their ID
+ * Access: Public
+ * Parametera: id
+ */
+router.put("/:id", (req, res) => {
+
+    // get id from req parameter
+    const id = Number(req.params.id);
+
+    // get book with id passed in parameter
+    const index = books.findIndex((book) => book.id === id);
+
+    // book not found
+    if (index === -1) {
+        res.status(404).json({
+            success: false,
+            message: `book with id: ${id} is not present in database`
+        });
+    }
+
+    /* if book is present in database, update the book with new data */
+
+    // get the book detail to update from request body
+    const data = req.body;
+
+    // update the book with new data
+    books[index] = {
+        ...books[index], ...data
+    }
+
+    //send success status
+    res.status(200).json({
+        success: true,
+        message: "book updated successfully",
+        data: books[index]
+    });
 })
 
 module.exports = router;
