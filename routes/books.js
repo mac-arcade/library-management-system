@@ -87,18 +87,43 @@ router.post("/", (req, res) => {
     // push new book in books 
     books.push(book);
 
+    // send success message
     res.status(201).json({
         success: true,
         message: "new book added successfully",
         data: book
     });
-
-    // if (!title || !author || !genre || !price || !publisher) {
-    //     res.status(400).json({
-    //         success: false,
-    //         message: "please enter all required data"
-    //     })
-    // }
 });
+
+/**
+ * Route: /books/:id
+ * Method: GET
+ * Description: get a book by its ID
+ * Access: Public
+ * Parametera: id
+ */
+router.get("/:id", (req, res) => {
+
+    // get id from req parameter
+    const id = Number(req.params.id);
+
+    // get book with id passed in parameter
+    const book = books.find((book) => book.id === id);
+
+    // book not found
+    if (!book) {
+        res.status(404).json({
+            success: false,
+            message: `book with id: ${id} is not present in database`
+        });
+    }
+
+    // book is present in database
+    res.status(200).json({
+        success: true,
+        data: book
+    });
+
+})
 
 module.exports = router;
