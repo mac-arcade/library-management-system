@@ -138,7 +138,7 @@ router.put("/:id", (req, res) => {
     // get id from req parameter
     const id = Number(req.params.id);
 
-    // get book with id passed in parameter
+    // get index of book with id passed in parameter
     const index = books.findIndex((book) => book.id === id);
 
     // book not found
@@ -166,5 +166,40 @@ router.put("/:id", (req, res) => {
         data: books[index]
     });
 })
+
+/**
+ * Route: /books/:id
+ * Method: DELETE
+ * Description: Delete a book using their ID
+ * Access: Public
+ * Parametera: id
+ */
+router.delete("/:id", (req, res) => {
+
+    // get id from req parameter
+    const id = Number(req.params.id);
+
+    // get index of book with id passed in parameter
+    const index = books.findIndex((book) => book.id === id)
+
+    // book is not found
+    if (index === -1) {
+        res.status(404).json({
+            success: false,
+            message: `book with id ${id} is not found`
+        });
+    }
+
+    // book is found, delete / splice from books
+    books.splice(index, 1);
+
+    // send success message
+    res.status(200).json({
+        success: true,
+        message: `book with id: ${id} deleted successfully`
+    });
+
+});
+
 
 module.exports = router;
