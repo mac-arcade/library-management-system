@@ -9,6 +9,10 @@ const router = express.Router();
 // import users data
 const { users } = require("../data/users.json");
 
+// import book issue transaction data
+const { issuedBooks } = require("../data/issuedBooks.json");
+const { use } = require("react");
+
 /**
  * Route: /users
  * Method: GET
@@ -61,6 +65,54 @@ router.post("/", (req, res) => {
         success: true,
         message: "New user registered successfully",
         data: user
+    });
+});
+
+/**
+ * @route   GET /users/subscription/:id
+ * @desc    Retrieve a user's subscription details and calculate any pending book fines
+ * @access  Public
+ * @params  {string} id - The unique identifier of the user
+ */
+router.get("/subscription/:id", (req, res) => {
+    // Convert the URL string parameter into a number for strict comparison
+    const id = Number(req.params.id);
+
+    // Verify if the user exists in the database
+    const user = users.find((u => u.id === id));
+
+    // Guard clause: Return early with a 404 error if user doesn't exist
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: `User with id: ${id} was not found`
+        });
+    }
+
+    // Format display elements
+    const fullName = `${user.name} ${user.surname}`;
+
+    // Retrieve all books currently checked out by this specific user
+    const userBookIssued = issuedBooks.filter((book) => book.userId === id);
+
+    // Sum up the fines from all issued books (defaults to 0 if no books or no fines exist)
+    const totalFine = userBookIssued.reduce((total, book) => total + (book.fine || 0), 0);
+
+    // Format the fine output so users see a friendly message if they owe nothing
+    const fineDisplay = totalFine > 0 ? totalFine : "No due fine";
+
+    // Consolidate user details, subscription status, and final fine statement
+    const result = {
+        fullName,
+        subscriptionType: user.subscriptionType,
+        subscriptionDate: user.subscriptionDate,
+        fine: fineDisplay
+    };
+
+    // Return the subscription payload
+    return res.status(200).json({
+        success: true,
+        data: result
     });
 });
 
