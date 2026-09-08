@@ -32,7 +32,7 @@ Before deleting a user, check:
 
 ---
 
-### `/users/subscription-details/:id`
+### `/users/subscription/:id`
 
 **GET**
 Get subscription details for a user by their ID.

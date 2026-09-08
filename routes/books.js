@@ -6,11 +6,17 @@ const express = require("express");
 // create express router
 const router = express.Router();
 
-// import books data
+// import book title/details data
 const { books } = require("../data/books.json");
 
-// import all physical book copies data
+// import physical book copy data
 const { bookCopies } = require("../data/bookCopies.json");
+
+// import book issue transaction data
+const { issuedBooks } = require("../data/issuedBooks.json");
+
+// import users data
+const { users } = require("../data/users.json");
 
 /**
  * Route: /books
@@ -127,6 +133,69 @@ router.get("/issued", (req, res) => {
         data: issued
     });
 });
+
+/**
+ * Route: /books/issued/withfine
+ * Method: GET
+ * Description: Get all issued books that currently have a fine, along with the fine amount, book and user details.
+ * Access: Public
+ * Parametera: none
+ */
+router.get("/issued/withfine", (req, res) => {
+
+    // filter issue records and keep only those with a fine greater than 0
+    const finedCopies = issuedBooks.filter(
+        (each) => Number(each.fine) > 0
+    );
+
+    // if no book has a pending fine
+    if (finedCopies.length === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "No book with due fine"
+        });
+    }
+
+    // combine each fined issue record with its related book and user details
+    const result = finedCopies.map((issue) => {
+
+        // find the physical book copy using the copyId stored in the issue record
+        const copy = bookCopies.find(
+            (copy) => copy.id === issue.copyId
+        );
+
+        // find the actual book details using the bookId from the physical copy
+        const book = books.find(
+            (book) => book.id === copy.bookId
+        );
+
+        // get only the title from the matched book
+        const bookTitle = book.title;
+
+        // find the user who issued the book using userId from the issue record
+        const user = users.find(
+            (user) => user.id === issue.userId
+        );
+
+        // combine user's first and surname
+        const userName = user.name + " " + user.surname;
+
+        // return a new object containing the original issue details
+        // along with the book title and user name
+        return {
+            ...issue,
+            bookTitle,
+            userName
+        };
+    });
+
+    // return all fined issue records with related book and user information
+    res.status(200).json({
+        success: true,
+        data: result
+    });
+});
+
 
 /**
  * Route: /books/:id
