@@ -145,7 +145,7 @@ router.get("/issued/withfine", (req, res) => {
 
     // filter issue records and keep only those with a fine greater than 0
     const finedCopies = issuedBooks.filter(
-        (each) => Number(each.fine) > 0
+        (issue) => Number(issue.fine) > 0
     );
 
     // if no book has a pending fine
@@ -169,33 +169,31 @@ router.get("/issued/withfine", (req, res) => {
             (book) => book.id === copy.bookId
         );
 
-        // get only the title from the matched book
-        const bookTitle = book.title;
-
         // find the user who issued the book using userId from the issue record
         const user = users.find(
             (user) => user.id === issue.userId
         );
 
-        // combine user's first and surname
-        const userName = user.name + " " + user.surname;
-
-        // return a new object containing the original issue details
-        // along with the book title and user name
+        // create a combined response object with issue, book, and user details
         return {
-            ...issue,
-            bookTitle,
-            userName
+            issueId: issue.id,
+            copyId: copy.id,
+            bookTitle: book.title,
+            userId: user.id,
+            userName: user.name + " " + user.surname,
+            issueDate: issue.issuedDate,
+            returnDate: issue.returnDate,
+            actualReturnDate: issue.actualReturnDate,
+            fine: issue.fine
         };
     });
 
-    // return all fined issue records with related book and user information
-    res.status(200).json({
+    // return all issued books that have a pending fine
+    return res.status(200).json({
         success: true,
         data: result
     });
 });
-
 
 /**
  * Route: /books/:id
