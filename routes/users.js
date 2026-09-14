@@ -11,7 +11,60 @@ const { users } = require("../data/users.json");
 
 // import book issue transaction data
 const { issuedBooks } = require("../data/issuedBooks.json");
-const { use } = require("react");
+
+// helper function to calculate remaining subscription validity
+function checkValidity(end, today) {
+
+    // calculate the total remaining time in seconds
+    const timeLeft = Math.ceil((end.getTime() - today.getTime()) / 1000);
+
+    // if no time is left, the subscription has expired
+    if (timeLeft <= 0) {
+        return "validity expired";
+    }
+
+    // store remaining seconds so we can break them into - months, days, hours, minutes, seconds
+    let remainingTime = timeLeft;
+
+    // Average number of seconds in a month
+    // 30.42 = average number of days per month in a year
+    const secInMonth = 60 * 60 * 24 * 30.42;
+
+    // Number of seconds in one day
+    const secInDay = 60 * 60 * 24
+
+    // Number of seconds in one hour
+    const secInHour = 60 * 60
+
+    // Number of seconds in one minute
+    const secInMinute = 60
+
+    // Calculate complete remaining months
+    const monthsLeft = Math.floor(remainingTime / secInMonth);
+
+    // Remove complete months from remaining time
+    remainingTime %= secInMonth;
+
+    // Calculate complete remaining days
+    const daysLeft = Math.floor(remainingTime / secInDay);
+
+    // Remove complete days from remaining time
+    remainingTime %= secInDay;
+
+    // Calculate complete remaining hours
+    const hoursLeft = Math.floor(remainingTime / secInHour);
+
+    // Remove complete hours from remaining time
+    remainingTime %= secInHour;
+
+    // Calculate complete remaining minutes
+    const minutesLeft = Math.floor(remainingTime / secInMinute);
+
+    // Whatever remains after removing minutes is seconds
+    const secondsLeft = Math.floor(remainingTime % secInMinute);
+
+    return `${monthsLeft} months ${daysLeft} days ${hoursLeft} hours ${minutesLeft} minutes ${remainingTime} seconds left`;
+}
 
 /**
  * Route: /users
@@ -96,16 +149,62 @@ router.get("/subscription/:id", (req, res) => {
     const userBookIssued = issuedBooks.filter((book) => book.userId === id);
 
     // Sum up the fines from all issued books (defaults to 0 if no books or no fines exist)
-    const totalFine = userBookIssued.reduce((total, book) => total + (book.fine || 0), 0);
+    const totalFine = userBookIssued.reduce((total, book) => total + Number(book.fine || 0), 0);
 
     // Format the fine output so users see a friendly message if they owe nothing
     const fineDisplay = totalFine > 0 ? totalFine : "No due fine";
+
+    // Initialize subscription duration in days
+    let subscriptionDays = 0;
+
+    // Assign subscription duration based on subscription type
+    switch (user.subscriptionType) {
+
+        case "Basic":
+
+            subscriptionDays = 90;
+            break;
+
+        case "Standard":
+
+            subscriptionDays = 180;
+            break;
+
+        case "Premium":
+
+            subscriptionDays = 365;
+            break;
+
+        default:
+            subscriptionDays = 0;
+            break;
+    }
+
+    // Get subscription date from user data
+    const subscriptionDate = user.subscriptionDate;
+
+    // Convert subscription date string into a JavaScript Date object
+    const subStartDate = new Date(subscriptionDate);
+
+    // Create a separate Date object for calculating the renewal date
+    const renewalDate = new Date(subStartDate);
+
+    // Add the subscription duration to calculate renewal date
+    renewalDate.setDate(renewalDate.getDate() + subscriptionDays);
+
+    // Get current date and time
+    const today = new Date();
+
+    // Calculate remaining subscription validity
+    const validity = checkValidity(renewalDate, today);
 
     // Consolidate user details, subscription status, and final fine statement
     const result = {
         fullName,
         subscriptionType: user.subscriptionType,
         subscriptionDate: user.subscriptionDate,
+        renewalDate: renewalDate.toISOString().split("T")[0],
+        validity,
         fine: fineDisplay
     };
 

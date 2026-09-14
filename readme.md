@@ -169,9 +169,9 @@ This structure allows:
 
 ## Subscription Types
 
-* **Basic** — 3 months
-* **Standard** — 6 months
-* **Premium** — 12 months
+* **Basic** — 90 days
+* **Standard** — 180 days
+* **Premium** — 365 days
 
 ### Subscription Penalties
 
