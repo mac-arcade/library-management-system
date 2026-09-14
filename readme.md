@@ -79,7 +79,7 @@ Get all currently issued books.
 
 ---
 
-### `/books/issued/withFine`
+### `/books/issued/withfine`
 
 **GET**
 Get all issued books that currently have a fine, along with the fine amount.

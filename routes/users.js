@@ -291,13 +291,13 @@ router.put("/:id", (req, res) => {
  */
 router.delete("/:id", (req, res) => {
 
-    // get passed id from request parameter
+    // Get user id from request parameter
     const id = Number(req.params.id);
 
-    // find user index with passed id
+    // Find user index using the provided id
     const index = users.findIndex((user) => user.id === id);
 
-    /* if user is not found */
+    /* If user does not exist, return 404 */
     if (index === -1) {
         return res.status(404).json({
             success: false,
@@ -305,13 +305,32 @@ router.delete("/:id", (req, res) => {
         });
     }
 
-    /* if user is present */
+    // Get the actual user data
+    const user = users[index]
+
+    // Find all books currently issued to this user
+    const rentedBooks = issuedBooks.filter(
+        (issue) => issue.userId === id
+    );
+
+    // Prevent deletion while the user still has issued books
+    if (rentedBooks.length > 0) {
+        return res.status(409).json({
+            success: false,
+            message: `User ${user.name} ${user.surname} with id ${id} has ${rentedBooks.length} issued book(s). Collect the books and clear any pending fines before deleting the user.`,
+            data: rentedBooks
+        });
+    }
+
+
+
+    // Delete user from users array
     users.splice(index, 1);
 
-    // send success status and message
+    // Send successful deletion response
     res.status(200).json({
         success: true,
-        message: `user ${id} deleted successfully`
+        message: `User ${user.name} ${user.surname} with id ${id} deleted successfully`
     });
 
 });
