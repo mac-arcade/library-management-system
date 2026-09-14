@@ -63,7 +63,7 @@ function checkValidity(end, today) {
     // Whatever remains after removing minutes is seconds
     const secondsLeft = Math.floor(remainingTime % secInMinute);
 
-    return `${monthsLeft} months ${daysLeft} days ${hoursLeft} hours ${minutesLeft} minutes ${remainingTime} seconds left`;
+    return `${monthsLeft} months ${daysLeft} days ${hoursLeft} hours ${minutesLeft} minutes ${secondsLeft} seconds left`;
 }
 
 /**
@@ -114,6 +114,7 @@ router.post("/", (req, res) => {
     //push new user to users array
     users.push(user);
 
+    // send success status, message, and data
     res.status(201).json({
         success: true,
         message: "New user registered successfully",
@@ -228,12 +229,15 @@ router.get("/:id", (req, res) => {
     const id = Number(req.params.id);
     const user = users.find((each) => each.id === id);
 
+    // user is not found
     if (!user) {
         return res.status(404).json({
             success: false,
             message: `User not found for id: ${id}`
         });
     }
+
+    // send success status and message
     res.status(200).json({
         success: true,
         data: user,
@@ -269,6 +273,7 @@ router.put("/:id", (req, res) => {
         ...users[index], ...data
     };
 
+    // send success status and message
     res.status(200).json({
         success: true,
         message: `user ${id} updated successfully`,
@@ -303,6 +308,7 @@ router.delete("/:id", (req, res) => {
     /* if user is present */
     users.splice(index, 1);
 
+    // send success status and message
     res.status(200).json({
         success: true,
         message: `user ${id} deleted successfully`
