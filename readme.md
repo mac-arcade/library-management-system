@@ -173,11 +173,9 @@ This structure allows:
 * **Standard** — 180 days
 * **Premium** — 365 days
 
-### Subscription Penalties
+### Late Book Submission Penalty
 
-* If a user misses the renewal date, a penalty of **₹100** should be collected.
-* If a user has an expired subscription, a penalty of **₹100** should be collected.
-* If both renewal and subscription penalties apply, the total collected amount should be **₹200**.
+* If a user submits a book after the due date, a penalty of **₹100** should be collected.
 
 ---
 
